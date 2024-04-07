@@ -1,0 +1,1 @@
+export const GITHUB_API_KEY = process.env.NEXT_PUBLIC_REACT_APP_GITHUB_API_KEY
