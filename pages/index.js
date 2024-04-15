@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import LandingPage from "./welcome";
+import LandingPage from "./landing-page";
 
 export default function Home() {
   const router = useRouter()

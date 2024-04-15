@@ -1,3 +1,4 @@
+import octokit from "./octokitClient"
 const recursiveDirectoryFetch = async (username, repo, path = '') => {
   try {
     const response = await octokit.request('GET /repos/{username}/{repo}/contents/{path}', {
@@ -5,17 +6,27 @@ const recursiveDirectoryFetch = async (username, repo, path = '') => {
       repo,
       path,
       headers: { 'X-GitHub-Api-Version': '2022-11-28' },
-    })
-    // console.log(`Repo content response:`, response.data)
+    });
     
+    const directoryContents = []
+
     for (const item of response.data) {
       if (item.type === 'dir') {
-        await recursiveDirectoryFetch(username, repo, item.path)
+        directoryContents.push(item);
+        const subdirContents = await recursiveDirectoryFetch(username, repo, item.path)
+        if (Array.isArray(subdirContents)) {
+          directoryContents.push(...subdirContents);
+        }
+      } else {
+        directoryContents.push(item);
       }
     }
     
+    // console.log(directoryContents)
+    return directoryContents
   } catch(error) {
-    console.error(`Error fetching the repo contents: ${error}`)
+    console.error(`Error fetching the repo contents: `, error);
+    return [];
   }
 }
 

@@ -1,8 +1,8 @@
-export const RepoTitle = ({item_name}) => {
+export const RepoTitle = ({repo_name}) => {
   // is styling this worth having its own component?
   return(
     <div>
-      {item_name}
+      {repo_name}
     </div>
   )
 }

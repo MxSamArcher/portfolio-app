@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-
-import fetchRepos from "@/utils/fetchRepos";
-import recursiveDirectoryFetch from "@/utils/recursiveDirectoryFetch";
+import Link from "next/link";
 
 import { RepoTitle } from "./RepoTitle";
 
+import fetchRepos from "@/utils/fetchRepos";
+
 export default function RepoList() {
   const [repos, setRepos] = useState([])
-  const [align, setAlign] = useState(null)
-  
   const username = 'MxSamArcher';
 
   useEffect(() => {
@@ -30,18 +28,18 @@ export default function RepoList() {
         </nav>
         <main className='flex justify-start flex-col items-center flex-grow p-4 w-full'>
           Main content
-          {repos ? repos.map((item) => {
-            return (
-              <RepoTitle
-              key={item.node_id}
-              item_name={item.name}
-              align={align}
-              />
+          {repos && repos.map((repo) => {
+            return(
+              <Link
+              key={repo.node_id}
+              href={`/repos/${repo.name}`}
+              >
+                <RepoTitle
+                  repo_name={repo.name}
+                />
+              </Link>
             )
-          })
-          :
-          null
-        }
+          })}
         </main>
       </div>
       <footer className='bg-sky-900 text-white p-4 shadow-md'>
