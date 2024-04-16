@@ -20,12 +20,9 @@ export default function RepoList() {
   return (
     <div className='flex flex-col justify-left w-full h-full min-h-screen text-gray-800 bg-sky-100'>
       <header className=' p-6 shadow-md'>
-        Header
+        Welcome!
       </header>
       <div className='flex flex-grow'>
-        <nav className=' flex-shrink-0 p-4 min-w-[10%]  shadow-inner'>
-          Nav
-        </nav>
         <main className='flex justify-start flex-col items-center flex-grow p-4 w-full'>
           Main content
           {repos && repos.map((repo) => {

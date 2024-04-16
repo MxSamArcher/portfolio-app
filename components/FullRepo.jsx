@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 
 import FileTree from "./FileTree";
 import FileViewer from "./FileViewer";
@@ -10,6 +11,10 @@ export default function FullRepo({ url_id }) {
   const [repo, setRepo] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileContent, setFileContent] = useState('');
+
+  const [navWidth, setNavWidth] = useState(0);
+  const navRef = useRef(null);
+
   const username = 'MxSamArcher';
 
   useEffect(() => {
@@ -30,20 +35,31 @@ export default function FullRepo({ url_id }) {
     setFileContent(atob(content.content));
   }
 
+  // useEffect(() => {
+  //   if (navRef.current) {
+  //     setNavWidth(navRef.current.offsetWidth);
+  //   }
+  // }, [repo]);
+
   return (
-    <div className='flex flex-col justify-left w-full h-full min-h-screen text-gray-800 bg-sky-100'>
+    <div className='flex flex-col justify-left w-full h-full min-h-screen text-gray-800 bg-sky-100 overflow-x-auto'>
       <header className=' p-6 shadow-md'>
-        Header
+        <Link href="/">
+          <div className="text-gray-800 hover:text-gray-600">Home</div>
+        </Link>
       </header>
       <div className='flex flex-grow'>
-        <nav className=' flex-shrink-0 p-4 min-w-[10%]  shadow-inner'>
+        <nav className='flex-shrink-0 p-4 w-1/5 shadow-inner'>
           <p>{url_id} contents:</p>
           <FileTree
             items={repo}
             onFileClick={handleFileClick}
           />
         </nav>
-        <main className='flex justify-start flex-col items-center flex-grow p-4 w-full'>
+        <main className='flex justify-start flex-col items-center flex-grow p-4'>
+        {/* <main className='flex justify-start flex-col items-center flex-grow p-4 overflow-x-auto' style={{ marginLeft: `${navWidth}px` }}> 
+        This is giving me grief. The contents of <main> are shifting left under <nav>. I'll fix it later.
+        */}
           <FileViewer
             filename={selectedFile}
             content={fileContent}
@@ -51,7 +67,7 @@ export default function FullRepo({ url_id }) {
         </main>
       </div>
       <footer className='bg-sky-900 text-white p-4 shadow-md'>
-        Footer
+        Sam Archer 2024
       </footer>
     </div>
   );
