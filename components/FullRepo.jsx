@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 import FileTree from "./FileTree";
@@ -12,9 +12,6 @@ export default function FullRepo({ url_id }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileContent, setFileContent] = useState('');
 
-  const [navWidth, setNavWidth] = useState(0);
-  const navRef = useRef(null);
-
   const username = 'MxSamArcher';
 
   useEffect(() => {
@@ -25,9 +22,6 @@ export default function FullRepo({ url_id }) {
     }
     initialiseRepo();
   },[url_id]);
-  // useEffect(() => {
-  //   console.log(repo)
-  // }, [repo])
 
   const handleFileClick = async (path) => {
     const content = await fetchFileContent(username, url_id, path);
@@ -35,11 +29,6 @@ export default function FullRepo({ url_id }) {
     setFileContent(atob(content.content));
   }
 
-  // useEffect(() => {
-  //   if (navRef.current) {
-  //     setNavWidth(navRef.current.offsetWidth);
-  //   }
-  // }, [repo]);
 
   return (
     <div className='flex flex-col justify-left w-full h-full min-h-screen text-gray-800 bg-sky-100 overflow-x-auto'>
@@ -57,9 +46,6 @@ export default function FullRepo({ url_id }) {
           />
         </nav>
         <main className='flex justify-start flex-col items-center flex-grow p-4'>
-        {/* <main className='flex justify-start flex-col items-center flex-grow p-4 overflow-x-auto' style={{ marginLeft: `${navWidth}px` }}> 
-        This is giving me grief. The contents of <main> are shifting left under <nav>. I'll fix it later.
-        */}
           <FileViewer
             filename={selectedFile}
             content={fileContent}
