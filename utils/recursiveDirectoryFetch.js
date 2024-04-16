@@ -8,22 +8,14 @@ const recursiveDirectoryFetch = async (username, repo, path = '') => {
       headers: { 'X-GitHub-Api-Version': '2022-11-28' },
     });
     
-    const directoryContents = []
-
-    for (const item of response.data) {
+    return Promise.all(response.data.map(async (item) => {
       if (item.type === 'dir') {
-        directoryContents.push(item);
-        const subdirContents = await recursiveDirectoryFetch(username, repo, item.path)
-        if (Array.isArray(subdirContents)) {
-          directoryContents.push(...subdirContents);
-        }
-      } else {
-        directoryContents.push(item);
+        const children = await recursiveDirectoryFetch(username, repo, item.path)
+        return { ...item, children }
       }
+      return item;
     }
-    
-    // console.log(directoryContents)
-    return directoryContents
+    ))
   } catch(error) {
     console.error(`Error fetching the repo contents: `, error);
     return [];
