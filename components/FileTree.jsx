@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function FileTree ({items}) {
+export default function FileTree ({items, onFileClick}) {
   const sortItems = (a, b) => {
     if (a.type === 'dir' && b.type !== 'dir') {
       return -1
@@ -20,13 +20,14 @@ export default function FileTree ({items}) {
         <FileOrDirectory
           key={index}
           item={item}
+          onFileClick={onFileClick}
         />
       ))}
     </div>
   )
 }
 
-function FileOrDirectory ({item}) {
+function FileOrDirectory ({item, onFileClick}) {
   const [isOpen, setIsOpen] = useState(false)
   const toggle = () => setIsOpen(!isOpen)
 
@@ -38,12 +39,15 @@ function FileOrDirectory ({item}) {
         </div>
         {isOpen && item.children && (
           <div className="ml-5">
-            <FileTree items={item.children} />
+            <FileTree
+              items={item.children}
+              onFileClick={onFileClick}
+            />
           </div>
         )}
       </div>
     )
   } else {
-    return <div>{item.name}</div>
+    return <div onClick={() => onFileClick(item.path)}>{item.name}</div>
   }
 }
